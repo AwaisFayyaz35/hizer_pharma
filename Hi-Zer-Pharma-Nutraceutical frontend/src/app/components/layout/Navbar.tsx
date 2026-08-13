@@ -8,7 +8,7 @@ import { useCart } from "../../hooks/useCart";
 const LINKS = [
   { label: "Shop", to: "/shop" },
   { label: "About", to: "/about" },
-  { label: "Contact", to: "/about" },
+  { label: "Contact", to: "/about#contact" },
 ];
 
 export function Navbar() {

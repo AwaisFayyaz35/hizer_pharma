@@ -1,5 +1,6 @@
 import Product from "../models/Product.js";
 import Category from "../models/Category.js";
+import cloudinary from "../config/cloudinary.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/apiError.js";
 import { ok, created } from "../utils/apiResponse.js";
@@ -74,5 +75,14 @@ export const updateProduct = asyncHandler(async function updateProduct(req, res)
 export const deleteProduct = asyncHandler(async function deleteProduct(req, res) {
   const product = await Product.findByIdAndDelete(req.params.id);
   if (!product) throw new ApiError(404, "Product not found");
+
+  await Promise.all(
+    product.images.map((image) =>
+      cloudinary.uploader.destroy(image.publicId).catch((err) => {
+        console.error(`Product delete: failed to remove image ${image.publicId}:`, err.message);
+      })
+    )
+  );
+
   ok(res, null, "Product deleted");
 });

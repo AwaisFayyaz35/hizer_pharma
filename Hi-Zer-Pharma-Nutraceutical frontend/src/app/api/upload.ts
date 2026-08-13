@@ -16,4 +16,14 @@ export const uploadApi = {
     form.append("file", file);
     return api.post<UploadResult>("/upload/prescription", form);
   },
+  paymentScreenshot: (file: File) => {
+    const form = new FormData();
+    form.append("file", file);
+    return api.post<UploadResult>("/upload/payment-screenshot", form);
+  },
+  qrCode: (file: File) => {
+    const form = new FormData();
+    form.append("image", file);
+    return api.post<UploadResult>("/upload/qr-code", form);
+  },
 };

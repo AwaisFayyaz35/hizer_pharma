@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useLocation } from "react-router";
 import { MapPin, Phone } from "lucide-react";
 import { ff, fs } from "../../lib/constants";
 import { contactApi } from "../../api/contact";
@@ -14,6 +15,12 @@ interface ContactForm {
 export default function AboutPage() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ContactForm>();
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash !== "#contact") return;
+    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [location.hash]);
 
   async function onSubmit(data: ContactForm) {
     setStatus("sending");
@@ -77,7 +84,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section style={{ background: "#eef4f1" }} className="py-20">
+      <section id="contact" style={{ background: "#eef4f1" }} className="py-20 scroll-mt-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div>

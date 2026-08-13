@@ -5,6 +5,7 @@ import {
   Tag,
   FileText,
   Users,
+  Mail,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -17,6 +18,7 @@ const NAV = [
   { to: "/admin/categories", label: "Categories", icon: <Tag size={16} /> },
   { to: "/admin/orders", label: "Orders", icon: <FileText size={16} /> },
   { to: "/admin/customers", label: "Customers", icon: <Users size={16} /> },
+  { to: "/admin/messages", label: "Messages", icon: <Mail size={16} /> },
   { to: "/admin/settings", label: "Settings", icon: <Settings size={16} /> },
 ];
 

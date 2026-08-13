@@ -7,6 +7,7 @@ import customerRoutes from "./customer.routes.js";
 import dashboardRoutes from "./dashboard.routes.js";
 import uploadRoutes from "./upload.routes.js";
 import contactRoutes from "./contact.routes.js";
+import settingsRoutes from "./settings.routes.js";
 
 const router = Router();
 
@@ -20,5 +21,6 @@ router.use("/customers", customerRoutes);
 router.use("/dashboard", dashboardRoutes);
 router.use("/upload", uploadRoutes);
 router.use("/contact", contactRoutes);
+router.use("/settings", settingsRoutes);
 
 export default router;

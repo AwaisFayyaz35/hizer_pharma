@@ -31,7 +31,23 @@ export interface CartItem {
   quantity: number;
 }
 
-export type OrderStatus = "Processing" | "Shipped" | "Received" | "Delivered" | "Cancelled";
+export type OrderStatus =
+  | "Payment Verification Pending"
+  | "Processing"
+  | "Shipped"
+  | "Received"
+  | "Delivered"
+  | "Cancelled"
+  | "Payment Rejected";
+
+export type PaymentStatus = "pending" | "approved" | "rejected";
+
+export interface PaymentDetails {
+  transactionId: string;
+  screenshotUrl?: string;
+  screenshotPublicId?: string;
+  screenshotDeletedAt?: string;
+}
 
 export interface ShippingAddress {
   firstName: string;
@@ -62,7 +78,10 @@ export interface Order {
   orderNumber: string;
   items: OrderItem[];
   shippingAddress: ShippingAddress;
-  paymentMethod: "cod";
+  paymentMethod: "bank_transfer" | "cod";
+  paymentDetails?: PaymentDetails;
+  paymentStatus: PaymentStatus;
+  paymentApprovedAt?: string;
   subtotal: number;
   deliveryFee: number;
   total: number;
@@ -83,6 +102,14 @@ export interface Customer {
   lastOrderAt: string;
 }
 
+export interface ContactMessage {
+  _id: string;
+  name: string;
+  email: string;
+  message: string;
+  createdAt: string;
+}
+
 export interface AdminUser {
   id: string;
   name: string;
@@ -97,4 +124,14 @@ export interface DashboardStats {
   lowStockCount: number;
   lowStockProducts: Product[];
   recentOrders: Order[];
+}
+
+export interface Settings {
+  _id: string;
+  bankName: string;
+  accountTitle: string;
+  accountNumber: string;
+  iban: string;
+  qrCodeImage?: { url: string; publicId: string };
+  deliveryFee: number;
 }
