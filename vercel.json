@@ -1,0 +1,13 @@
+{
+  "framework": null,
+  "installCommand": "npm install --prefix \"Hi-Zer-Pharma-Nutraceutical backend\" && npm install --prefix \"Hi-Zer-Pharma-Nutraceutical frontend\"",
+  "buildCommand": "npm run build --prefix \"Hi-Zer-Pharma-Nutraceutical frontend\"",
+  "outputDirectory": "Hi-Zer-Pharma-Nutraceutical frontend/dist",
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "crons": [
+    { "path": "/api/cron/cleanup-screenshots", "schedule": "0 3 * * *" }
+  ]
+}

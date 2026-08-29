@@ -1,13 +1,31 @@
+<<<<<<< HEAD
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { AlertTriangle, Check, Upload } from "lucide-react";
+=======
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
+import { AlertTriangle, Check, Landmark, Upload } from "lucide-react";
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 import { ff, fs, fmt, FREE_DELIVERY_THRESHOLD, STANDARD_DELIVERY_FEE } from "../../lib/constants";
 import { useCart } from "../../hooks/useCart";
 import { ordersApi } from "../../api/orders";
 import { uploadApi } from "../../api/upload";
+<<<<<<< HEAD
 import { ApiClientError } from "../../api/client";
 import type { ShippingAddress } from "../../types";
+=======
+import { settingsApi } from "../../api/settings";
+import { ApiClientError } from "../../api/client";
+import type { Settings, ShippingAddress } from "../../types";
+
+type CheckoutFormValues = ShippingAddress & { transactionId: string };
+
+const SCREENSHOT_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+const SCREENSHOT_MAX_BYTES = 5 * 1024 * 1024;
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 
 export default function CheckoutPage() {
   const { cart, hasRx, clearCart } = useCart();
@@ -16,17 +34,41 @@ export default function CheckoutPage() {
     register,
     handleSubmit,
     formState: { errors },
+<<<<<<< HEAD
   } = useForm<ShippingAddress>();
+=======
+  } = useForm<CheckoutFormValues>();
+
+  const [settings, setSettings] = useState<Settings | null>(null);
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 
   const [prescriptionUrl, setPrescriptionUrl] = useState<string | undefined>();
   const [uploadingRx, setUploadingRx] = useState(false);
   const [rxError, setRxError] = useState("");
+<<<<<<< HEAD
+=======
+
+  const [screenshot, setScreenshot] = useState<{ url: string; publicId: string } | null>(null);
+  const [uploadingScreenshot, setUploadingScreenshot] = useState(false);
+  const [screenshotError, setScreenshotError] = useState("");
+
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [confirmedOrder, setConfirmedOrder] = useState<{ orderNumber: string; email: string } | null>(null);
 
+<<<<<<< HEAD
   const subtotal = cart.reduce((s, i) => s + (i.product.discountPrice ?? i.product.price) * i.quantity, 0);
   const delivery = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : STANDARD_DELIVERY_FEE;
+=======
+  useEffect(() => {
+    settingsApi.get().then(setSettings).catch(() => setSettings(null));
+  }, []);
+
+  const subtotal = cart.reduce((s, i) => s + (i.product.discountPrice ?? i.product.price) * i.quantity, 0);
+  const deliveryFee = settings?.deliveryFee ?? STANDARD_DELIVERY_FEE;
+  const delivery = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : deliveryFee;
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 
   async function handlePrescriptionChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -43,11 +85,47 @@ export default function CheckoutPage() {
     }
   }
 
+<<<<<<< HEAD
   async function onSubmit(shippingAddress: ShippingAddress) {
+=======
+  async function handleScreenshotChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setScreenshotError("");
+
+    if (!SCREENSHOT_TYPES.includes(file.type)) {
+      setScreenshotError("Only JPG, JPEG, PNG, or WEBP images are allowed");
+      return;
+    }
+    if (file.size > SCREENSHOT_MAX_BYTES) {
+      setScreenshotError("Screenshot must be under 5 MB");
+      return;
+    }
+
+    setUploadingScreenshot(true);
+    try {
+      const result = await uploadApi.paymentScreenshot(file);
+      setScreenshot({ url: result.url, publicId: result.publicId });
+    } catch (err) {
+      setScreenshotError(err instanceof ApiClientError ? err.message : "Upload failed, please try again");
+    } finally {
+      setUploadingScreenshot(false);
+    }
+  }
+
+  async function onSubmit({ transactionId, ...shippingAddress }: CheckoutFormValues) {
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
     if (hasRx && !prescriptionUrl) {
       setRxError("Please upload a valid prescription to continue");
       return;
     }
+<<<<<<< HEAD
+=======
+    if (!screenshot) {
+      setScreenshotError("Please upload your payment screenshot to continue");
+      return;
+    }
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
     setSubmitting(true);
     setSubmitError("");
     try {
@@ -55,6 +133,14 @@ export default function CheckoutPage() {
         items: cart.map((i) => ({ productId: i.product._id, quantity: i.quantity })),
         shippingAddress,
         prescriptionUrl,
+<<<<<<< HEAD
+=======
+        paymentDetails: {
+          transactionId,
+          screenshotUrl: screenshot.url,
+          screenshotPublicId: screenshot.publicId,
+        },
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
       });
       setConfirmedOrder({ orderNumber: order.orderNumber, email: shippingAddress.email });
       clearCart();
@@ -76,7 +162,11 @@ export default function CheckoutPage() {
           Order <span className="font-semibold text-[#0c1a16]">{confirmedOrder.orderNumber}</span> confirmed.
         </p>
         <p className="text-xs text-[#0c1a16]/40 mb-8" style={ff}>
+<<<<<<< HEAD
           Save your order number — you'll need it with your email or phone to track this order.
+=======
+          We're verifying your payment — save your order number, you'll need it with your email or phone to track this order.
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
         </p>
         <div className="flex gap-3 justify-center">
           <button
@@ -193,11 +283,72 @@ export default function CheckoutPage() {
           {/* Payment */}
           <div className="bg-white rounded-2xl border border-[#0c3f35]/8 p-6">
             <h2 className="font-bold text-[#0c1a16] mb-4" style={ff}>Payment Method</h2>
+<<<<<<< HEAD
             <label className="flex items-center gap-3 p-3.5 rounded-xl border border-[#0c3f35] bg-[#0c3f35]/3">
               <input type="radio" checked readOnly className="accent-[#0c3f35]" />
               <span className="text-lg">💵</span>
               <span className="text-sm font-medium text-[#0c1a16]" style={ff}>Cash on Delivery</span>
             </label>
+=======
+            <div className="flex items-center gap-3 p-3.5 rounded-xl border border-[#0c3f35] bg-[#0c3f35]/3 mb-4">
+              <Landmark size={18} className="text-[#0c3f35]" />
+              <span className="text-sm font-medium text-[#0c1a16]" style={ff}>Bank Transfer Payment</span>
+            </div>
+
+            <div className="rounded-xl bg-[#f8f9fa] border border-[#0c3f35]/8 p-4 mb-4 space-y-1.5 text-sm" style={ff}>
+              <div className="flex justify-between"><span className="text-[#0c1a16]/50">Bank Name</span><span className="font-semibold text-[#0c1a16]">{settings?.bankName || "—"}</span></div>
+              <div className="flex justify-between"><span className="text-[#0c1a16]/50">Account Title</span><span className="font-semibold text-[#0c1a16]">{settings?.accountTitle || "—"}</span></div>
+              <div className="flex justify-between"><span className="text-[#0c1a16]/50">Account Number</span><span className="font-semibold text-[#0c1a16]">{settings?.accountNumber || "—"}</span></div>
+              <div className="flex justify-between"><span className="text-[#0c1a16]/50">IBAN</span><span className="font-semibold text-[#0c1a16]">{settings?.iban || "—"}</span></div>
+              {settings?.qrCodeImage?.url && (
+                <div className="pt-3 flex flex-col items-center">
+                  <img src={settings.qrCodeImage.url} alt="Bank QR code" className="w-36 h-36 object-contain rounded-lg border border-[#0c3f35]/8 bg-white" />
+                  <span className="text-xs text-[#0c1a16]/40 mt-1.5">Scan to pay</span>
+                </div>
+              )}
+            </div>
+
+            <p className="text-xs text-[#0c1a16]/45 mb-3" style={ff}>
+              Transfer the total amount to the account above, then enter your transaction reference and upload a screenshot of the payment.
+            </p>
+
+            <div className="space-y-3">
+              <div>
+                <input
+                  placeholder="Payment Reference / Transaction ID"
+                  className="w-full px-4 py-2.5 rounded-xl bg-[#f8f9fa] border border-[#0c3f35]/8 text-sm focus:outline-none focus:ring-2 focus:ring-[#28a869]/25"
+                  style={ff}
+                  {...register("transactionId", { required: true })}
+                />
+                {errors.transactionId && <p className="text-xs text-red-500 mt-1">Transaction ID is required</p>}
+              </div>
+
+              <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[#0c3f35]/20 rounded-xl p-6 cursor-pointer hover:bg-[#0c3f35]/3 transition-colors">
+                {screenshot ? (
+                  <>
+                    <Check size={18} className="text-[#28a869]" />
+                    <span className="text-sm text-[#28a869] font-semibold" style={ff}>Screenshot uploaded</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload size={18} className="text-[#0c3f35]/50" />
+                    <span className="text-sm text-[#0c1a16]/65 font-semibold" style={ff}>
+                      {uploadingScreenshot ? "Uploading…" : "Upload Payment Screenshot"}
+                    </span>
+                    <span className="text-xs text-[#0c1a16]/35" style={ff}>JPG, JPEG, PNG, or WEBP · max 5 MB</span>
+                  </>
+                )}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  className="hidden"
+                  onChange={handleScreenshotChange}
+                  disabled={uploadingScreenshot}
+                />
+              </label>
+              {screenshotError && <p className="text-xs text-red-500">{screenshotError}</p>}
+            </div>
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
           </div>
           {/* RX Upload */}
           {hasRx && (
@@ -246,7 +397,11 @@ export default function CheckoutPage() {
             {submitError && <p className="text-xs text-red-500 mb-3">{submitError}</p>}
             <button
               type="submit"
+<<<<<<< HEAD
               disabled={submitting || uploadingRx}
+=======
+              disabled={submitting || uploadingRx || uploadingScreenshot}
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
               className="w-full py-4 bg-[#0c3f35] text-white rounded-xl font-bold hover:bg-[#0c3f35]/88 active:scale-[0.98] transition-all shadow-md shadow-[#0c3f35]/15 disabled:opacity-60"
               style={ff}
             >

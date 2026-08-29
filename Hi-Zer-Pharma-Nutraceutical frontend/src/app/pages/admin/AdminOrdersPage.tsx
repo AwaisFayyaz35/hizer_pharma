@@ -7,7 +7,20 @@ import { useDebounce } from "../../hooks/useDebounce";
 import { ordersApi } from "../../api/orders";
 import type { Order, OrderStatus } from "../../types";
 
+<<<<<<< HEAD
 const STATUS_FILTERS: (OrderStatus | "All")[] = ["All", "Processing", "Shipped", "Received", "Delivered", "Cancelled"];
+=======
+const STATUS_FILTERS: (OrderStatus | "All")[] = [
+  "All",
+  "Payment Verification Pending",
+  "Processing",
+  "Shipped",
+  "Received",
+  "Delivered",
+  "Cancelled",
+  "Payment Rejected",
+];
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 
 export default function AdminOrdersPage() {
   const [q, setQ] = useState("");

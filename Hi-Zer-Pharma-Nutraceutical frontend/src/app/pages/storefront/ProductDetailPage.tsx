@@ -5,7 +5,10 @@ import { RxBadge } from "../../components/common/RxBadge";
 import { ff, fs, fmt } from "../../lib/constants";
 import { useCart } from "../../hooks/useCart";
 import { productsApi } from "../../api/products";
+<<<<<<< HEAD
 import { setPageSeo, SITE_NAME } from "../../lib/seo";
+=======
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 import type { Product } from "../../types";
 
 export default function ProductDetailPage() {
@@ -21,6 +24,7 @@ export default function ProductDetailPage() {
     setLoading(true);
     productsApi
       .get(id)
+<<<<<<< HEAD
       .then((p) => {
         setProduct(p);
         setPageSeo({
@@ -29,6 +33,9 @@ export default function ProductDetailPage() {
           canonicalPath: `/product/${p._id}`,
         });
       })
+=======
+      .then(setProduct)
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
       .catch(() => setProduct(null))
       .finally(() => setLoading(false));
   }, [id]);

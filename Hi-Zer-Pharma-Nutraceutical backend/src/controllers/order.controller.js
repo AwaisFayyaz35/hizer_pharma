@@ -1,13 +1,24 @@
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
+<<<<<<< HEAD
+=======
+import Settings from "../models/Settings.js";
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/apiError.js";
 import { ok, created } from "../utils/apiResponse.js";
 import { generateOrderNumber } from "../utils/orderIdGenerator.js";
+<<<<<<< HEAD
 import { FREE_DELIVERY_THRESHOLD, STANDARD_DELIVERY_FEE, ORDER_STATUSES } from "../config/constants.js";
 
 export const createOrder = asyncHandler(async function createOrder(req, res) {
   const { items, shippingAddress, prescriptionUrl } = req.body;
+=======
+import { FREE_DELIVERY_THRESHOLD, MANUAL_ORDER_STATUSES } from "../config/constants.js";
+
+export const createOrder = asyncHandler(async function createOrder(req, res) {
+  const { items, shippingAddress, prescriptionUrl, paymentDetails } = req.body;
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 
   if (!Array.isArray(items) || items.length === 0) {
     throw new ApiError(400, "Cart is empty");
@@ -19,6 +30,19 @@ export const createOrder = asyncHandler(async function createOrder(req, res) {
     }
   }
 
+<<<<<<< HEAD
+=======
+  const transactionId = typeof paymentDetails?.transactionId === "string" ? paymentDetails.transactionId.trim() : "";
+  const screenshotUrl = paymentDetails?.screenshotUrl;
+  const screenshotPublicId = paymentDetails?.screenshotPublicId;
+  if (!transactionId) {
+    throw new ApiError(400, "Payment Reference / Transaction ID is required");
+  }
+  if (!screenshotUrl || !screenshotPublicId) {
+    throw new ApiError(400, "Payment screenshot is required");
+  }
+
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
   const productIds = items.map((i) => i.productId);
   const products = await Product.find({ _id: { $in: productIds }, isActive: true });
   const productMap = new Map(products.map((p) => [p._id.toString(), p]));
@@ -47,7 +71,12 @@ export const createOrder = asyncHandler(async function createOrder(req, res) {
     throw new ApiError(400, "A prescription upload is required for one or more items in your cart");
   }
 
+<<<<<<< HEAD
   const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : STANDARD_DELIVERY_FEE;
+=======
+  const settings = await Settings.getSingleton();
+  const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : settings.deliveryFee;
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
   const orderNumber = await generateOrderNumber();
 
   const order = await Order.create({
@@ -59,6 +88,10 @@ export const createOrder = asyncHandler(async function createOrder(req, res) {
     total: subtotal + deliveryFee,
     requiresPrescription,
     prescriptionUrl,
+<<<<<<< HEAD
+=======
+    paymentDetails: { transactionId, screenshotUrl, screenshotPublicId },
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
   });
 
   await Promise.all(
@@ -109,16 +142,62 @@ export const getOrder = asyncHandler(async function getOrder(req, res) {
 
 export const updateOrderStatus = asyncHandler(async function updateOrderStatus(req, res) {
   const { status, note } = req.body;
+<<<<<<< HEAD
   if (!ORDER_STATUSES.includes(status)) {
+=======
+  if (!MANUAL_ORDER_STATUSES.includes(status)) {
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
     throw new ApiError(400, "Invalid status");
   }
 
   const order = await Order.findById(req.params.id);
   if (!order) throw new ApiError(404, "Order not found");
 
+<<<<<<< HEAD
+=======
+  if (["Shipped", "Received", "Delivered"].includes(status) && order.paymentStatus !== "approved") {
+    throw new ApiError(400, "Cannot update shipping status before payment is approved");
+  }
+
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
   order.status = status;
   order.statusHistory.push({ status, note: note || "" });
   await order.save();
 
   ok(res, order, "Order status updated");
 });
+<<<<<<< HEAD
+=======
+
+export const approvePayment = asyncHandler(async function approvePayment(req, res) {
+  const order = await Order.findById(req.params.id);
+  if (!order) throw new ApiError(404, "Order not found");
+  if (order.paymentStatus === "approved") {
+    throw new ApiError(400, "Payment is already approved");
+  }
+
+  order.paymentStatus = "approved";
+  order.paymentApprovedAt = new Date();
+  order.status = "Processing";
+  order.statusHistory.push({ status: "Processing", note: "Payment verified and approved" });
+  await order.save();
+
+  ok(res, order, "Payment approved");
+});
+
+export const rejectPayment = asyncHandler(async function rejectPayment(req, res) {
+  const { note } = req.body;
+  const order = await Order.findById(req.params.id);
+  if (!order) throw new ApiError(404, "Order not found");
+  if (order.paymentStatus === "approved") {
+    throw new ApiError(400, "Cannot reject a payment that is already approved");
+  }
+
+  order.paymentStatus = "rejected";
+  order.status = "Payment Rejected";
+  order.statusHistory.push({ status: "Payment Rejected", note: note || "" });
+  await order.save();
+
+  ok(res, order, "Payment rejected");
+});
+>>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7

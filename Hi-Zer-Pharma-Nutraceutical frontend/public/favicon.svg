@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0c3f35"/>
+      <stop offset="1" stop-color="#146b52"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="30" y1="18" x2="54" y2="46" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7dd3bd"/>
+      <stop offset="1" stop-color="#28a869"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="16" fill="url(#bg)"/>
+
+  <!-- leaf, curling behind the cross -->
+  <path d="M50 14C38 14 30 22 30 34C30 40 33 44 33 44C33 44 37 45 43 39C49 33 50 24 50 14Z" fill="url(#leaf)"/>
+  <path d="M33 44C33 44 36 34 46 24" stroke="#0c3f35" stroke-width="1.6" stroke-linecap="round" opacity="0.35"/>
+
+  <!-- pharmacy cross -->
+  <path d="M25 14H33V25H44V33H33V44H25V33H14V25H25V14Z" fill="#ffffff"/>
+</svg>
