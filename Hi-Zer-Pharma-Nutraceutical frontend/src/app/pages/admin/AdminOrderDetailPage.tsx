@@ -1,43 +1,31 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-<<<<<<< HEAD
-import { StatusBadge } from "../../components/common/StatusBadge";
-import { ff, fs, fmt } from "../../lib/constants";
-=======
 import { CheckCircle2, XCircle } from "lucide-react";
 import { StatusBadge } from "../../components/common/StatusBadge";
 import { ff, fmt } from "../../lib/constants";
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 import { ordersApi } from "../../api/orders";
 import { ApiClientError } from "../../api/client";
 import type { Order, OrderStatus } from "../../types";
 
 const STATUSES: OrderStatus[] = ["Processing", "Shipped", "Received", "Delivered", "Cancelled"];
 
-<<<<<<< HEAD
-=======
 const PAYMENT_STATUS_MAP: Record<string, string> = {
   pending: "bg-amber-50 text-amber-700 border-amber-200",
   approved: "bg-emerald-50 text-emerald-700 border-emerald-200",
   rejected: "bg-red-50 text-red-700 border-red-200",
 };
 
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 export default function AdminOrderDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-<<<<<<< HEAD
-  const [error, setError] = useState("");
-=======
   const [verifying, setVerifying] = useState(false);
   const [error, setError] = useState("");
   const [paymentError, setPaymentError] = useState("");
   const [rejectNote, setRejectNote] = useState("");
   const [showRejectForm, setShowRejectForm] = useState(false);
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 
   function load() {
     if (!id) return;
@@ -65,11 +53,6 @@ export default function AdminOrderDetailPage() {
     }
   }
 
-<<<<<<< HEAD
-  if (loading) return <div className="p-8 text-sm text-gray-400" style={ff}>Loading…</div>;
-  if (!order) return <div className="p-8 text-sm text-red-500" style={ff}>Order not found.</div>;
-
-=======
   async function handleApprovePayment() {
     if (!id) return;
     setVerifying(true);
@@ -105,7 +88,6 @@ export default function AdminOrderDetailPage() {
 
   const paymentApproved = order.paymentStatus === "approved";
 
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
   return (
     <div className="p-8 max-w-3xl">
       <button onClick={() => navigate("/admin/orders")} className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-900 mb-6 transition-colors" style={ff}>
@@ -134,8 +116,6 @@ export default function AdminOrderDetailPage() {
         </div>
       </div>
 
-<<<<<<< HEAD
-=======
       <div className="bg-white rounded-xl border border-gray-100 p-5 mb-5">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-bold text-gray-900" style={ff}>
@@ -220,7 +200,6 @@ export default function AdminOrderDetailPage() {
         )}
       </div>
 
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
       {order.requiresPrescription && (
         <div className="bg-white rounded-xl border border-gray-100 p-5 mb-5">
           <h2 className="text-sm font-bold text-gray-900 mb-3" style={ff}>Prescription</h2>
@@ -258,22 +237,6 @@ export default function AdminOrderDetailPage() {
 
       <div className="bg-white rounded-xl border border-gray-100 p-5">
         <h2 className="text-sm font-bold text-gray-900 mb-3" style={ff}>Update Status</h2>
-<<<<<<< HEAD
-        <div className="flex flex-wrap gap-2">
-          {STATUSES.map((s) => (
-            <button
-              key={s}
-              onClick={() => handleStatusChange(s)}
-              disabled={updating || order.status === s}
-              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-all disabled:opacity-40 ${
-                order.status === s ? "bg-[#0c3f35] text-white" : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-              }`}
-              style={ff}
-            >
-              {s}
-            </button>
-          ))}
-=======
         {!paymentApproved && (
           <p className="text-xs text-amber-600 mb-3" style={ff}>
             Shipping statuses are locked until payment is approved.
@@ -297,7 +260,6 @@ export default function AdminOrderDetailPage() {
               </button>
             );
           })}
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
         </div>
         {error && <p className="text-xs text-red-500 mt-3">{error}</p>}
       </div>

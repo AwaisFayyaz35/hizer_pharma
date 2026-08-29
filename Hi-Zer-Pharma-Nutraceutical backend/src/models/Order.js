@@ -1,9 +1,5 @@
 import mongoose from "mongoose";
-<<<<<<< HEAD
-import { ORDER_STATUSES } from "../config/constants.js";
-=======
 import { ORDER_STATUSES, PAYMENT_STATUSES } from "../config/constants.js";
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 
 const orderItemSchema = new mongoose.Schema(
   {
@@ -38,8 +34,6 @@ const statusHistorySchema = new mongoose.Schema(
   { _id: false }
 );
 
-<<<<<<< HEAD
-=======
 // screenshotUrl/screenshotPublicId are intentionally optional at the schema level
 // (though always set at creation) so the cleanup cron can unset them after the
 // 15-day retention window without tripping required-field validation on save.
@@ -53,37 +47,25 @@ const paymentDetailsSchema = new mongoose.Schema(
   { _id: false }
 );
 
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 const orderSchema = new mongoose.Schema(
   {
     orderNumber: { type: String, required: true, unique: true },
     items: { type: [orderItemSchema], required: true, validate: (v) => v.length > 0 },
     shippingAddress: { type: shippingAddressSchema, required: true },
-<<<<<<< HEAD
-    paymentMethod: { type: String, enum: ["cod"], default: "cod" },
-=======
     paymentMethod: { type: String, enum: ["bank_transfer"], default: "bank_transfer" },
     paymentDetails: { type: paymentDetailsSchema, required: true },
     paymentStatus: { type: String, enum: PAYMENT_STATUSES, default: "pending" },
     paymentApprovedAt: { type: Date },
     paymentRejectedAt: { type: Date },
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
     subtotal: { type: Number, required: true },
     deliveryFee: { type: Number, required: true },
     total: { type: Number, required: true },
     requiresPrescription: { type: Boolean, default: false },
     prescriptionUrl: { type: String },
-<<<<<<< HEAD
-    status: { type: String, enum: ORDER_STATUSES, default: "Processing" },
-    statusHistory: {
-      type: [statusHistorySchema],
-      default: () => [{ status: "Processing" }],
-=======
     status: { type: String, enum: ORDER_STATUSES, default: "Payment Verification Pending" },
     statusHistory: {
       type: [statusHistorySchema],
       default: () => [{ status: "Payment Verification Pending" }],
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
     },
   },
   { timestamps: true }

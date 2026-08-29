@@ -31,9 +31,6 @@ export interface CartItem {
   quantity: number;
 }
 
-<<<<<<< HEAD
-export type OrderStatus = "Processing" | "Shipped" | "Received" | "Delivered" | "Cancelled";
-=======
 export type OrderStatus =
   | "Payment Verification Pending"
   | "Processing"
@@ -51,7 +48,6 @@ export interface PaymentDetails {
   screenshotPublicId?: string;
   screenshotDeletedAt?: string;
 }
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 
 export interface ShippingAddress {
   firstName: string;
@@ -82,14 +78,10 @@ export interface Order {
   orderNumber: string;
   items: OrderItem[];
   shippingAddress: ShippingAddress;
-<<<<<<< HEAD
-  paymentMethod: "cod";
-=======
   paymentMethod: "bank_transfer" | "cod";
   paymentDetails?: PaymentDetails;
   paymentStatus: PaymentStatus;
   paymentApprovedAt?: string;
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
   subtotal: number;
   deliveryFee: number;
   total: number;
@@ -110,8 +102,6 @@ export interface Customer {
   lastOrderAt: string;
 }
 
-<<<<<<< HEAD
-=======
 export interface ContactMessage {
   _id: string;
   name: string;
@@ -120,7 +110,6 @@ export interface ContactMessage {
   createdAt: string;
 }
 
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 export interface AdminUser {
   id: string;
   name: string;
@@ -136,8 +125,6 @@ export interface DashboardStats {
   lowStockProducts: Product[];
   recentOrders: Order[];
 }
-<<<<<<< HEAD
-=======
 
 export interface Settings {
   _id: string;
@@ -148,4 +135,3 @@ export interface Settings {
   qrCodeImage?: { url: string; publicId: string };
   deliveryFee: number;
 }
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7

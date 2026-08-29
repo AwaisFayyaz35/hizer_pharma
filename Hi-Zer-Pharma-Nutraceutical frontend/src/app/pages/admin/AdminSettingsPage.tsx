@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { ChevronRight, UserPlus } from "lucide-react";
-import { ff } from "../../lib/constants";
-import { authApi } from "../../api/auth";
-=======
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Landmark, Truck, UserPlus } from "lucide-react";
@@ -12,7 +5,6 @@ import { ff } from "../../lib/constants";
 import { authApi } from "../../api/auth";
 import { settingsApi } from "../../api/settings";
 import { uploadApi } from "../../api/upload";
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 import { ApiClientError } from "../../api/client";
 
 interface NewAdminForm {
@@ -21,13 +13,6 @@ interface NewAdminForm {
   password: string;
 }
 
-<<<<<<< HEAD
-const COMING_SOON = [
-  { title: "Store Settings", desc: "Name, logo, contact details, and business hours" },
-  { title: "Delivery Rules", desc: "Zones, fees, minimum order thresholds, and free delivery rules" },
-  { title: "Roles & Permissions", desc: "Define what each staff role can view and edit" },
-];
-=======
 interface PaymentSettingsForm {
   bankName: string;
   accountTitle: string;
@@ -38,7 +23,6 @@ interface PaymentSettingsForm {
 interface DeliverySettingsForm {
   deliveryFee: number;
 }
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 
 export default function AdminSettingsPage() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm<NewAdminForm>();
@@ -46,8 +30,6 @@ export default function AdminSettingsPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-<<<<<<< HEAD
-=======
   const {
     register: registerPayment,
     handleSubmit: handlePaymentSubmit,
@@ -91,7 +73,6 @@ export default function AdminSettingsPage() {
       });
   }, [resetPayment, resetDelivery]);
 
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
   async function onSubmit(data: NewAdminForm) {
     setStatus("saving");
     setError("");
@@ -107,8 +88,6 @@ export default function AdminSettingsPage() {
     }
   }
 
-<<<<<<< HEAD
-=======
   async function handleQrChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -159,13 +138,10 @@ export default function AdminSettingsPage() {
     }
   }
 
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
   return (
     <div className="p-8 max-w-xl">
       <h1 className="text-xl font-bold text-gray-900 mb-6" style={ff}>Settings</h1>
 
-<<<<<<< HEAD
-=======
       <div className="bg-white rounded-xl border border-gray-100 p-5 mb-5">
         <div className="flex items-center gap-2 mb-4">
           <Truck size={16} className="text-[#0c3f35]" />
@@ -273,7 +249,6 @@ export default function AdminSettingsPage() {
         </form>
       </div>
 
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
       <div className="bg-white rounded-xl border border-gray-100 p-5 mb-3">
         <div className="flex items-center gap-2 mb-4">
           <UserPlus size={16} className="text-[#0c3f35]" />
@@ -322,21 +297,6 @@ export default function AdminSettingsPage() {
           </button>
         </form>
       </div>
-<<<<<<< HEAD
-
-      <div className="space-y-3">
-        {COMING_SOON.map((item) => (
-          <div key={item.title} className="w-full bg-white rounded-xl border border-gray-100 p-5 flex items-center justify-between opacity-60">
-            <div>
-              <p className="text-sm font-bold text-gray-900" style={ff}>{item.title}</p>
-              <p className="text-xs text-gray-400 mt-0.5" style={ff}>{item.desc} · Coming soon</p>
-            </div>
-            <ChevronRight size={15} className="text-gray-300 flex-shrink-0" />
-          </div>
-        ))}
-      </div>
-=======
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
     </div>
   );
 }

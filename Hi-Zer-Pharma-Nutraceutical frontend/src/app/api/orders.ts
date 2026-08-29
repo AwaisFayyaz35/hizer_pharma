@@ -5,10 +5,7 @@ export interface PlaceOrderPayload {
   items: { productId: string; quantity: number }[];
   shippingAddress: ShippingAddress;
   prescriptionUrl?: string;
-<<<<<<< HEAD
-=======
   paymentDetails: { transactionId: string; screenshotUrl: string; screenshotPublicId: string };
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 }
 
 export interface OrderListParams {
@@ -33,9 +30,6 @@ export const ordersApi = {
   get: (id: string) => api.get<Order>(`/orders/${id}`),
   updateStatus: (id: string, status: OrderStatus, note?: string) =>
     api.patch<Order>(`/orders/${id}/status`, { status, note }),
-<<<<<<< HEAD
-=======
   approvePayment: (id: string) => api.patch<Order>(`/orders/${id}/payment/approve`),
   rejectPayment: (id: string, note?: string) => api.patch<Order>(`/orders/${id}/payment/reject`, { note }),
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 };

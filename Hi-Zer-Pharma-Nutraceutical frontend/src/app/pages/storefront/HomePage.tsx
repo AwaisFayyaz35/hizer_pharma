@@ -5,10 +5,7 @@ import { ProductCard } from "../../components/storefront/ProductCard";
 import { ff, fs } from "../../lib/constants";
 import { categoriesApi } from "../../api/categories";
 import { productsApi } from "../../api/products";
-<<<<<<< HEAD
 import { setPageSeo } from "../../lib/seo";
-=======
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 import type { Category, Product } from "../../types";
 
 export default function HomePage() {
@@ -17,7 +14,6 @@ export default function HomePage() {
   const [featured, setFeatured] = useState<Product[]>([]);
 
   useEffect(() => {
-<<<<<<< HEAD
     setPageSeo({
       title: "Hi-Zer Pharmaceutical",
       description:
@@ -27,8 +23,6 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-=======
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
     categoriesApi.list().then(setCategories).catch(() => setCategories([]));
     productsApi
       .list({ limit: 4, featured: true })

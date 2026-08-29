@@ -1,22 +1,11 @@
-<<<<<<< HEAD
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import { useForm } from "react-hook-form";
-import { AlertTriangle, Check, Upload } from "lucide-react";
-=======
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { AlertTriangle, Check, Landmark, Upload } from "lucide-react";
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 import { ff, fs, fmt, FREE_DELIVERY_THRESHOLD, STANDARD_DELIVERY_FEE } from "../../lib/constants";
 import { useCart } from "../../hooks/useCart";
 import { ordersApi } from "../../api/orders";
 import { uploadApi } from "../../api/upload";
-<<<<<<< HEAD
-import { ApiClientError } from "../../api/client";
-import type { ShippingAddress } from "../../types";
-=======
 import { settingsApi } from "../../api/settings";
 import { ApiClientError } from "../../api/client";
 import type { Settings, ShippingAddress } from "../../types";
@@ -25,7 +14,6 @@ type CheckoutFormValues = ShippingAddress & { transactionId: string };
 
 const SCREENSHOT_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const SCREENSHOT_MAX_BYTES = 5 * 1024 * 1024;
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 
 export default function CheckoutPage() {
   const { cart, hasRx, clearCart } = useCart();
@@ -34,33 +22,22 @@ export default function CheckoutPage() {
     register,
     handleSubmit,
     formState: { errors },
-<<<<<<< HEAD
-  } = useForm<ShippingAddress>();
-=======
   } = useForm<CheckoutFormValues>();
 
   const [settings, setSettings] = useState<Settings | null>(null);
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 
   const [prescriptionUrl, setPrescriptionUrl] = useState<string | undefined>();
   const [uploadingRx, setUploadingRx] = useState(false);
   const [rxError, setRxError] = useState("");
-<<<<<<< HEAD
-=======
 
   const [screenshot, setScreenshot] = useState<{ url: string; publicId: string } | null>(null);
   const [uploadingScreenshot, setUploadingScreenshot] = useState(false);
   const [screenshotError, setScreenshotError] = useState("");
 
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [confirmedOrder, setConfirmedOrder] = useState<{ orderNumber: string; email: string } | null>(null);
 
-<<<<<<< HEAD
-  const subtotal = cart.reduce((s, i) => s + (i.product.discountPrice ?? i.product.price) * i.quantity, 0);
-  const delivery = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : STANDARD_DELIVERY_FEE;
-=======
   useEffect(() => {
     settingsApi.get().then(setSettings).catch(() => setSettings(null));
   }, []);
@@ -68,7 +45,6 @@ export default function CheckoutPage() {
   const subtotal = cart.reduce((s, i) => s + (i.product.discountPrice ?? i.product.price) * i.quantity, 0);
   const deliveryFee = settings?.deliveryFee ?? STANDARD_DELIVERY_FEE;
   const delivery = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : deliveryFee;
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 
   async function handlePrescriptionChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -85,9 +61,6 @@ export default function CheckoutPage() {
     }
   }
 
-<<<<<<< HEAD
-  async function onSubmit(shippingAddress: ShippingAddress) {
-=======
   async function handleScreenshotChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -114,18 +87,14 @@ export default function CheckoutPage() {
   }
 
   async function onSubmit({ transactionId, ...shippingAddress }: CheckoutFormValues) {
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
     if (hasRx && !prescriptionUrl) {
       setRxError("Please upload a valid prescription to continue");
       return;
     }
-<<<<<<< HEAD
-=======
     if (!screenshot) {
       setScreenshotError("Please upload your payment screenshot to continue");
       return;
     }
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
     setSubmitting(true);
     setSubmitError("");
     try {
@@ -133,14 +102,11 @@ export default function CheckoutPage() {
         items: cart.map((i) => ({ productId: i.product._id, quantity: i.quantity })),
         shippingAddress,
         prescriptionUrl,
-<<<<<<< HEAD
-=======
         paymentDetails: {
           transactionId,
           screenshotUrl: screenshot.url,
           screenshotPublicId: screenshot.publicId,
         },
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
       });
       setConfirmedOrder({ orderNumber: order.orderNumber, email: shippingAddress.email });
       clearCart();
@@ -162,11 +128,7 @@ export default function CheckoutPage() {
           Order <span className="font-semibold text-[#0c1a16]">{confirmedOrder.orderNumber}</span> confirmed.
         </p>
         <p className="text-xs text-[#0c1a16]/40 mb-8" style={ff}>
-<<<<<<< HEAD
-          Save your order number — you'll need it with your email or phone to track this order.
-=======
           We're verifying your payment — save your order number, you'll need it with your email or phone to track this order.
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
         </p>
         <div className="flex gap-3 justify-center">
           <button
@@ -283,13 +245,6 @@ export default function CheckoutPage() {
           {/* Payment */}
           <div className="bg-white rounded-2xl border border-[#0c3f35]/8 p-6">
             <h2 className="font-bold text-[#0c1a16] mb-4" style={ff}>Payment Method</h2>
-<<<<<<< HEAD
-            <label className="flex items-center gap-3 p-3.5 rounded-xl border border-[#0c3f35] bg-[#0c3f35]/3">
-              <input type="radio" checked readOnly className="accent-[#0c3f35]" />
-              <span className="text-lg">💵</span>
-              <span className="text-sm font-medium text-[#0c1a16]" style={ff}>Cash on Delivery</span>
-            </label>
-=======
             <div className="flex items-center gap-3 p-3.5 rounded-xl border border-[#0c3f35] bg-[#0c3f35]/3 mb-4">
               <Landmark size={18} className="text-[#0c3f35]" />
               <span className="text-sm font-medium text-[#0c1a16]" style={ff}>Bank Transfer Payment</span>
@@ -348,7 +303,6 @@ export default function CheckoutPage() {
               </label>
               {screenshotError && <p className="text-xs text-red-500">{screenshotError}</p>}
             </div>
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
           </div>
           {/* RX Upload */}
           {hasRx && (
@@ -397,11 +351,7 @@ export default function CheckoutPage() {
             {submitError && <p className="text-xs text-red-500 mb-3">{submitError}</p>}
             <button
               type="submit"
-<<<<<<< HEAD
-              disabled={submitting || uploadingRx}
-=======
               disabled={submitting || uploadingRx || uploadingScreenshot}
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
               className="w-full py-4 bg-[#0c3f35] text-white rounded-xl font-bold hover:bg-[#0c3f35]/88 active:scale-[0.98] transition-all shadow-md shadow-[#0c3f35]/15 disabled:opacity-60"
               style={ff}
             >

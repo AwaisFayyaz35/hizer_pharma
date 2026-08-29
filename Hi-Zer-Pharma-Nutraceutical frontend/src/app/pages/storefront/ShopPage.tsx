@@ -6,10 +6,7 @@ import { ff, fs } from "../../lib/constants";
 import { useDebounce } from "../../hooks/useDebounce";
 import { categoriesApi } from "../../api/categories";
 import { productsApi } from "../../api/products";
-<<<<<<< HEAD
 import { setPageSeo } from "../../lib/seo";
-=======
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
 import type { Category, Product } from "../../types";
 
 export default function ShopPage() {
@@ -25,7 +22,6 @@ export default function ShopPage() {
   const debouncedQuery = useDebounce(query, 300);
 
   useEffect(() => {
-<<<<<<< HEAD
     setPageSeo({
       title: "Shop All Products — Hi-Zer Pharmaceutical",
       description:
@@ -35,8 +31,6 @@ export default function ShopPage() {
   }, []);
 
   useEffect(() => {
-=======
->>>>>>> 44ea1d68271f7ef405d789f92d0c1b7eaceeb8b7
     categoriesApi.list().then(setCategories).catch(() => setCategories([]));
   }, []);
 
