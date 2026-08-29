@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "build": "vite build",
+    "build": "node scripts/generate-sitemap.mjs && vite build",
+    "sitemap": "node scripts/generate-sitemap.mjs",
     "dev": "vite",
     "typecheck": "tsc --noEmit"
   },

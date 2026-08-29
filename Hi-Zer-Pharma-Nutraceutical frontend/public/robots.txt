@@ -1,0 +1,13 @@
+# Hi-Zer Pharmaceutical — robots.txt
+# The public storefront is fully open to crawlers.
+
+User-agent: *
+Allow: /
+
+# Non-public areas (admin panel + transactional pages). These contain no
+# indexable content; blocking them does not affect the public website.
+Disallow: /admin
+Disallow: /cart
+Disallow: /checkout
+
+Sitemap: https://www.hi-zerpharmaceutical.com/sitemap.xml

@@ -5,12 +5,22 @@ import { ProductCard } from "../../components/storefront/ProductCard";
 import { ff, fs } from "../../lib/constants";
 import { categoriesApi } from "../../api/categories";
 import { productsApi } from "../../api/products";
+import { setPageSeo } from "../../lib/seo";
 import type { Category, Product } from "../../types";
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<Category[]>([]);
   const [featured, setFeatured] = useState<Product[]>([]);
+
+  useEffect(() => {
+    setPageSeo({
+      title: "Hi-Zer Pharmaceutical",
+      description:
+        "Premium pharmaceutical and nutraceutical products, reviewed by certified pharmacists and delivered securely to your door.",
+      canonicalPath: "/",
+    });
+  }, []);
 
   useEffect(() => {
     categoriesApi.list().then(setCategories).catch(() => setCategories([]));
