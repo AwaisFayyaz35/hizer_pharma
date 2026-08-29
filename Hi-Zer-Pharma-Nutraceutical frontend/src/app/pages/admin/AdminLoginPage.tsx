@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Navigate, useNavigate } from "react-router";
 import { fs, ff } from "../../lib/constants";
 import { useAuth } from "../../hooks/useAuth";
 import { ApiClientError } from "../../api/client";
+import { setNoIndex } from "../../lib/seo";
 
 interface LoginForm {
   email: string;
@@ -16,6 +17,11 @@ export default function AdminLoginPage() {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>();
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  // Admin login must never be indexed by search engines.
+  useEffect(() => {
+    setNoIndex();
+  }, []);
 
   if (admin) {
     return <Navigate to="/admin/dashboard" replace />;

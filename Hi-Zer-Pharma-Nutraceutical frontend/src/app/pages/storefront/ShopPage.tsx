@@ -23,9 +23,9 @@ export default function ShopPage() {
 
   useEffect(() => {
     setPageSeo({
-      title: "Shop All Products — Hi-Zer Pharmaceutical",
+      title: "Shop Pharmaceutical & Nutraceutical Products | Hi-Zer Pharmaceutical",
       description:
-        "Browse the full range of Hi-Zer Pharmaceutical products — pharmaceuticals and nutraceuticals verified by certified pharmacists.",
+        "Browse the full Hi-Zer Pharmaceutical catalogue — supplements, vitamins and prescription-grade medicines, each reviewed by certified pharmacists, with secure nationwide delivery.",
       canonicalPath: "/shop",
     });
   }, []);

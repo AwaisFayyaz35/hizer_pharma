@@ -15,9 +15,9 @@ export default function HomePage() {
 
   useEffect(() => {
     setPageSeo({
-      title: "Hi-Zer Pharmaceutical",
+      title: "Hi-Zer Pharmaceutical | Pharmaceutical & Nutraceutical Products",
       description:
-        "Premium pharmaceutical and nutraceutical products, reviewed by certified pharmacists and delivered securely to your door.",
+        "Hi-Zer Pharmaceutical supplies pharmacist-verified pharmaceutical and nutraceutical products — supplements, vitamins and prescription-grade medicines — with secure, tracked delivery nationwide.",
       canonicalPath: "/",
     });
   }, []);

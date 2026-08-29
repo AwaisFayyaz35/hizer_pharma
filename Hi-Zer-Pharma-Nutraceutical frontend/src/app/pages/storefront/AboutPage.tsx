@@ -5,6 +5,7 @@ import { MapPin, Phone } from "lucide-react";
 import { ff, fs } from "../../lib/constants";
 import { contactApi } from "../../api/contact";
 import { ApiClientError } from "../../api/client";
+import { setPageSeo } from "../../lib/seo";
 
 interface ContactForm {
   name: string;
@@ -16,6 +17,15 @@ export default function AboutPage() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ContactForm>();
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const location = useLocation();
+
+  useEffect(() => {
+    setPageSeo({
+      title: "About Hi-Zer Pharmaceutical | Our Story & Contact",
+      description:
+        "Hi-Zer Pharmaceutical is a pharmacist-led supplier of quality pharmaceutical and nutraceutical products. Learn about our approach and get in touch with our team.",
+      canonicalPath: "/about",
+    });
+  }, []);
 
   useEffect(() => {
     if (location.hash !== "#contact") return;

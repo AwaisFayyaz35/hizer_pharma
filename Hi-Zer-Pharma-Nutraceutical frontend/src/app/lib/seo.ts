@@ -1,9 +1,12 @@
 /**
  * Minimal runtime <head> management for the storefront SPA.
  *
- * Keeps <title>, <meta name="description"> and <link rel="canonical"> in sync
- * with the page the user (or Googlebot) is viewing. No dependency, no redesign —
- * just enough for search engines to identify and index each public page.
+ * Keeps <title>, <meta name="description">, <meta name="robots"> and
+ * <link rel="canonical"> in sync with the page being viewed (by a user or by
+ * Googlebot, which executes this JS before indexing). No dependency, no redesign.
+ *
+ * Public storefront pages call setPageSeo() -> robots "index, follow".
+ * Admin / login pages call setNoIndex()   -> robots "noindex, nofollow".
  */
 
 export const SITE_URL = (
@@ -33,6 +36,16 @@ function upsertCanonical(href: string) {
   el.setAttribute("href", href);
 }
 
+/** Force the robots directive. Public pages -> "index, follow". */
+export function setRobots(content: "index, follow" | "noindex, nofollow") {
+  upsertMeta('meta[name="robots"]', "name", "robots", content);
+}
+
+/** Mark the current (non-public) view as non-indexable. */
+export function setNoIndex() {
+  setRobots("noindex, nofollow");
+}
+
 export interface PageSeo {
   /** Full <title> text. */
   title: string;
@@ -46,6 +59,9 @@ export function setPageSeo({ title, description, canonicalPath }: PageSeo) {
   const canonical = `${SITE_URL}${canonicalPath.startsWith("/") ? "" : "/"}${canonicalPath}`;
 
   document.title = title;
+  // Public pages are always indexable — re-assert it in case the previous
+  // client-side route (e.g. an admin page) had switched this to noindex.
+  setRobots("index, follow");
   upsertCanonical(canonical);
   upsertMeta('meta[property="og:title"]', "property", "og:title", title);
   upsertMeta('meta[property="og:url"]', "property", "og:url", canonical);

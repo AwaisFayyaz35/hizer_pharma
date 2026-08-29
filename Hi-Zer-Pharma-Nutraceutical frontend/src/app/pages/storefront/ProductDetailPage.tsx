@@ -23,9 +23,18 @@ export default function ProductDetailPage() {
       .get(id)
       .then((p) => {
         setProduct(p);
+        const cat = typeof p.category === "string" ? p.category : p.category?.name;
+        const context = [cat, p.subcategory].filter(Boolean).join(" · ");
+        const metaDescription = [
+          context ? `${p.name} (${context}) from Hi-Zer Pharmaceutical.` : `${p.name} from Hi-Zer Pharmaceutical.`,
+          (p.description || "").trim(),
+          p.dosage ? `Recommended dosage: ${p.dosage}.` : "",
+        ]
+          .filter(Boolean)
+          .join(" ");
         setPageSeo({
-          title: `${p.name} — ${SITE_NAME}`,
-          description: p.description,
+          title: `${p.name} | ${SITE_NAME}`,
+          description: metaDescription,
           canonicalPath: `/product/${p._id}`,
         });
       })
