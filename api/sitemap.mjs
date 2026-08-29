@@ -7,11 +7,16 @@
  *
  * Product URLs are read from MongoDB via the existing backend model/connection
  * helper — nothing is hardcoded. Same import style as api/index.mjs.
+ *
+ * The whole DB step is bounded by DB_BUDGET_MS: if the database is slow or cold
+ * we still return a valid sitemap (static routes) quickly, so Google's sitemap
+ * fetcher never times out. The CDN then caches the full result (s-maxage).
  */
 import { connectDB } from "../Hi-Zer-Pharma-Nutraceutical backend/src/config/db.js";
 import Product from "../Hi-Zer-Pharma-Nutraceutical backend/src/models/Product.js";
 
 const FALLBACK_ORIGIN = "https://www.hi-zerpharmaceutical.com";
+const DB_BUDGET_MS = 7000;
 
 function resolveOrigin(req) {
   const fromEnv = process.env.SITE_URL || process.env.PUBLIC_SITE_URL;
@@ -47,6 +52,21 @@ function renderUrlset(urls) {
   );
 }
 
+async function getProductUrls(origin) {
+  await connectDB();
+  const products = await Product.find({ isActive: true })
+    .select("_id updatedAt")
+    .sort({ updatedAt: -1 })
+    .maxTimeMS(DB_BUDGET_MS)
+    .lean();
+  return products.map((p) => ({
+    loc: `${origin}/product/${p._id}`,
+    lastmod: p.updatedAt ? new Date(p.updatedAt).toISOString() : undefined,
+    changefreq: "weekly",
+    priority: "0.8",
+  }));
+}
+
 export default async function handler(req, res) {
   const origin = resolveOrigin(req);
   const staticUrls = [
@@ -55,33 +75,31 @@ export default async function handler(req, res) {
     { loc: `${origin}/about`, changefreq: "monthly", priority: "0.5" },
   ];
 
+  let productUrls = [];
+  let complete = true;
   try {
-    await connectDB();
-    const products = await Product.find({ isActive: true })
-      .select("_id updatedAt")
-      .sort({ updatedAt: -1 })
-      .lean();
-
-    const productUrls = products.map((p) => ({
-      loc: `${origin}/product/${p._id}`,
-      lastmod: p.updatedAt ? new Date(p.updatedAt).toISOString() : undefined,
-      changefreq: "weekly",
-      priority: "0.8",
-    }));
-
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "application/xml; charset=utf-8");
-    res.setHeader(
-      "Cache-Control",
-      "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400"
-    );
-    res.end(renderUrlset([...staticUrls, ...productUrls]));
+    productUrls = await Promise.race([
+      getProductUrls(origin),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error(`db budget ${DB_BUDGET_MS}ms exceeded`)), DB_BUDGET_MS)
+      ),
+    ]);
   } catch (err) {
     // Fail soft: still return valid XML (never HTML / a 500 page) so Search
     // Console does not reject the sitemap.
-    console.error("[sitemap] generation failed:", err);
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "application/xml; charset=utf-8");
-    res.end(renderUrlset(staticUrls));
+    complete = false;
+    console.error("[sitemap] product lookup skipped:", err.message);
   }
+
+  res.statusCode = 200;
+  res.setHeader("Content-Type", "application/xml; charset=utf-8");
+  // Cache the full result for an hour at the CDN; if we had to fall back to the
+  // static routes, cache only briefly so the full list is picked up soon.
+  res.setHeader(
+    "Cache-Control",
+    complete
+      ? "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400"
+      : "public, max-age=0, s-maxage=60"
+  );
+  res.end(renderUrlset([...staticUrls, ...productUrls]));
 }
