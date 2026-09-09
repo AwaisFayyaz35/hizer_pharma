@@ -5,9 +5,15 @@
   "outputDirectory": "Hi-Zer-Pharma-Nutraceutical frontend/dist",
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
+    { "source": "/product/:id", "destination": "/api/product-page" },
     { "source": "/api/:path*", "destination": "/api" },
     { "source": "/((?!api/|sitemap\\.xml|robots\\.txt).*)", "destination": "/index.html" }
   ],
+  "functions": {
+    "api/product-page.mjs": {
+      "includeFiles": "Hi-Zer-Pharma-Nutraceutical frontend/dist/index.html"
+    }
+  },
   "headers": [
     {
       "source": "/robots.txt",
