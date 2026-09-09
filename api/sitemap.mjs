@@ -27,9 +27,17 @@ function resolveOrigin(req) {
 }
 
 function xmlEscape(value) {
-  return String(value).replace(/[<>&'"]/g, (c) => ({
-    "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", '"': "&quot;",
-  }[c]));
+  return String(value).replace(
+    /[<>&'"]/g,
+    (c) =>
+      ({
+        "<": "&lt;",
+        ">": "&gt;",
+        "&": "&amp;",
+        "'": "&apos;",
+        '"': "&quot;",
+      })[c],
+  );
 }
 
 function renderUrlset(urls) {
@@ -81,7 +89,10 @@ export default async function handler(req, res) {
     productUrls = await Promise.race([
       getProductUrls(origin),
       new Promise((_, reject) =>
-        setTimeout(() => reject(new Error(`db budget ${DB_BUDGET_MS}ms exceeded`)), DB_BUDGET_MS)
+        setTimeout(
+          () => reject(new Error(`db budget ${DB_BUDGET_MS}ms exceeded`)),
+          DB_BUDGET_MS,
+        ),
       ),
     ]);
   } catch (err) {
@@ -98,8 +109,8 @@ export default async function handler(req, res) {
   res.setHeader(
     "Cache-Control",
     complete
-      ? "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400"
-      : "public, max-age=0, s-maxage=60"
+      ? "public, max-age=0, s-maxage=300, stale-while-revalidate=86400"
+      : "public, max-age=0, s-maxage=60",
   );
   res.end(renderUrlset([...staticUrls, ...productUrls]));
 }
